@@ -6,7 +6,7 @@ public class MatrizGrafos {
     public MatrizGrafos() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Qual o tipo de matriz? \n1- Adjacente \n2- Incidente? ");
+        System.out.println("Qual o tipo de matriz? \n1- Adjacente \n2- Incidente ");
         int tipoMatriz = sc.nextInt();
 
         switch (tipoMatriz) {
@@ -46,10 +46,12 @@ public class MatrizGrafos {
                         }
                         System.out.println(tipoGrafo);
                 break;
+
             case 2:
 
-                System.out.println("Tamanho da matriz: ");
+                System.out.println("Vertices: ");
                 int y = sc.nextInt();
+                System.out.println("Arestas: ");
                 int z = sc.nextInt();
                 int matrizIncidente[][] = new int[y][z];
 
@@ -65,6 +67,26 @@ public class MatrizGrafos {
                         matrizIncidente[linha][coluna] = sc.nextInt();
                     }
                 }
+
+                System.out.println("Matriz Final: ");
+                for (int i = 0; i < matrizIncidente.length; i++) { // Linhas
+                            for (int j = 0; j < matrizIncidente[i /* ou 0 */].length; j++) { // Colunas
+                                System.out.print(matrizIncidente[i][j] + " ");
+                            }
+                            System.out.println("");
+                        }
+                tipoGrafo = "Grafo simples";
+                for (int i = 0; i < matrizIncidente.length; i++) { // Linhas
+                            for (int j = 0; j < matrizIncidente[i /* ou 0 */].length; j++) { // Colunas
+                                if (matrizIncidente[i][j] > 1) {
+                                    tipoGrafo = "Multigrafo";
+                                } else if (matrizIncidente[i][j] < 0) {
+                                    tipoGrafo = "Grafo dirigido";
+                                }
+                            }
+                        }
+                        System.out.println(tipoGrafo);
+
                 break;
         }
 
