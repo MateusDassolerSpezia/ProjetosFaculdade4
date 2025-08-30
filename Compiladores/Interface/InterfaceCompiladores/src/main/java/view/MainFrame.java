@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
 
     private final JTextArea editor = new JTextArea();
     private final JTextArea areaMensagens = new JTextArea();
-    private final JLabel barraStatus = new JLabel("  (sem arquivo)");
+    private final JLabel barraStatus = new JLabel(" ");
     private File arquivoAtual = null;
     
     // Referência ao botão salvar para poder atualizá-lo dinamicamente
@@ -157,7 +157,7 @@ public class MainFrame extends JFrame {
                 // Sem arquivo - modo "Salvar Como"
                 btnSalvar.setText("Salvar [Ctrl+S]");
                 btnSalvar.setIcon(carregarIcone("salvarComo.png"));
-                btnSalvar.setToolTipText("Salvar [Ctrl+S]");
+                btnSalvar.setToolTipText("Salvar Como [Ctrl+S]");
             } else {
                 // Com arquivo - modo "Salvar"
                 btnSalvar.setText("Salvar [Ctrl+S]");
@@ -179,7 +179,15 @@ public class MainFrame extends JFrame {
     private void acaoAbrir() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        
+        // Configura filtro para aceitar apenas arquivos .txt
+        javax.swing.filechooser.FileNameExtensionFilter filtroTxt = 
+            new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Texto (*.txt)", "txt");
+        chooser.setFileFilter(filtroTxt);
+        chooser.setAcceptAllFileFilterUsed(false); // Remove a opção "All Files"
+        
         int op = chooser.showOpenDialog(this);
+        
         if (op == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             try {
@@ -187,16 +195,16 @@ public class MainFrame extends JFrame {
                 editor.setText(conteudo);
                 editor.setCaretPosition(0);
                 arquivoAtual = f;
-                areaMensagens.setText("");
+                areaMensagens.setText(""); // Só limpa quando arquivo é aberto com sucesso
                 atualizarStatus();
                 atualizarBotaoSalvar(); // Atualiza o botão para "Salvar"
             } catch (Exception ex) {
                 areaMensagens.setText("Erro ao abrir arquivo: " + ex.getMessage());
+                atualizarStatus();
             }
-        } else {
-            areaMensagens.setText("");
-            atualizarStatus(); // mantém arquivo atual
         }
+        // Quando op == CANCEL_OPTION ou ERROR_OPTION, não faz nada
+        // Isso preserva as mensagens existentes na areaMensagens
     }
 
     private void acaoSalvar() {
@@ -205,10 +213,16 @@ public class MainFrame extends JFrame {
                 // Modo "Salvar Como"
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                
+                // Configura filtro para salvar apenas arquivos .txt
+                javax.swing.filechooser.FileNameExtensionFilter filtroTxt = 
+                    new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Texto (*.txt)", "txt");
+                chooser.setFileFilter(filtroTxt);
+                chooser.setAcceptAllFileFilterUsed(false); // Remove a opção "All Files"
+                
                 int op = chooser.showSaveDialog(this);
                 if (op != JFileChooser.APPROVE_OPTION) {
-                    areaMensagens.setText("");
-                    atualizarStatus();
+                    // Se cancelou, não faz nada - mantém mensagens existentes
                     return;
                 }
                 arquivoAtual = chooser.getSelectedFile();
@@ -218,7 +232,7 @@ public class MainFrame extends JFrame {
             }
             // Salva o arquivo (tanto no modo "Salvar" quanto "Salvar Como")
             FileUtils.writeFile(arquivoAtual, editor.getText());
-            areaMensagens.setText("");
+            areaMensagens.setText(""); // Só limpa quando arquivo é salvo com sucesso
             atualizarStatus();
             atualizarBotaoSalvar(); // Atualiza o botão para "Salvar" após salvar pela primeira vez
         } catch (Exception ex) {
@@ -227,7 +241,7 @@ public class MainFrame extends JFrame {
     }
 
     private void acaoCompilar() {
-        areaMensagens.setText("compilação de programas ainda não foi implementada");
+        areaMensagens.setText("compilação de programas ainda não implementada");
     }
 
     private void acaoEquipe() {
@@ -236,9 +250,9 @@ public class MainFrame extends JFrame {
 
     private void atualizarStatus() {
         if (arquivoAtual == null) {
-            barraStatus.setText("  (sem arquivo)");
+            barraStatus.setText(" ");
         } else {
-            barraStatus.setText("  " + arquivoAtual.getParent() + "  |  " + arquivoAtual.getName());
+            barraStatus.setText("  " + arquivoAtual.getParent() + "\\" + arquivoAtual.getName());
         }
     }
 }
