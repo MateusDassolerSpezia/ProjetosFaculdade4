@@ -26,7 +26,7 @@ public class MainFrame extends JFrame {
     // Referência ao botão salvar para poder atualizá-lo dinamicamente
     private JButton btnSalvar;
 
-    // equipe (edite os nomes aqui)
+    // equipe
     private static final String EQUIPE = "Equipe do Compilador:\n- Mateus Spezia\n- Pedro Alegria \n- Vinícius Oneda";
 
     public MainFrame() {
@@ -116,7 +116,6 @@ public class MainFrame extends JFrame {
         JButton btnNovo = criarBotao("novo", "Novo [Ctrl+N]", "novo.png", e -> acaoNovo());
         JButton btnAbrir = criarBotao("abrir", "Abrir [Ctrl+O]", "abrir.png", e -> acaoAbrir());
         
-        // Cria o botão salvar e mantém referência para atualizações dinâmicas
         btnSalvar = criarBotao("salvar", "Salvar [Ctrl+S]", "salvarComo.png", e -> acaoSalvar());
         
         JButton btnCopiar = criarBotao("copiar", "Copiar [Ctrl+C]", "copiar.png", e -> editor.copy());
@@ -203,8 +202,6 @@ public class MainFrame extends JFrame {
                 atualizarStatus();
             }
         }
-        // Quando op == CANCEL_OPTION ou ERROR_OPTION, não faz nada
-        // Isso preserva as mensagens existentes na areaMensagens
     }
 
     private void acaoSalvar() {
