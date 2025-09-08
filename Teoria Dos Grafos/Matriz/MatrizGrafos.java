@@ -1,5 +1,3 @@
-package Matriz;
-
 import java.util.Scanner;
 
 public class MatrizGrafos {
