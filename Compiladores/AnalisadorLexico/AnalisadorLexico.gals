@@ -5,7 +5,7 @@ Language = Java
 ScannerName = Lexico
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = Stream
+Input = String
 #RegularDefinitions
 mai: [A-Z]
 min: [a-z]
