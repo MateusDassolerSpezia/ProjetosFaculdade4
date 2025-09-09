@@ -1,12 +1,18 @@
+// Mateus Dassoler Spezia
+// Pedro Alegria
+// Vinícius Oneda
+
 import java.util.*;
 
 public class GrafoAnalyzer {
     // private int[][] matrizAdjacencia;
     private int numVertices;
+    boolean nulo;
 
     public GrafoAnalyzer(int[][] matriz) {
         // this.matrizAdjacencia = matriz;
         this.numVertices = matriz.length;
+        this.nulo = false;
     }
 
     /**
@@ -19,9 +25,22 @@ public class GrafoAnalyzer {
         boolean multigrafo = false;
         boolean completo = true;
         boolean regular = true;
+        nulo = false;
+        int nuloAux = 0;
         int primeiroGrau = -1;
 
         // Verifica se é dirigido (matriz não simétrica)
+        
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                nuloAux += matrizAdjacencia[i][j];
+            }
+        }
+
+        if (nuloAux == 0) {
+            nulo = true;
+        }
+
         for (int i = 0; i < numVertices; i++) {
             for (int j = 0; j < numVertices; j++) {
                 if (matrizAdjacencia[i][j] != matrizAdjacencia[j][i]) {
@@ -75,6 +94,14 @@ public class GrafoAnalyzer {
         // Determina o tipo
         StringBuilder tipo = new StringBuilder();
 
+        if (nulo) {
+            tipo.append("nulo");
+            if (numVertices == 1) {
+                tipo.append(", completo");
+            }
+            tipo.append(", regular");
+        } else {
+
         if (dirigido) {
             tipo.append("dirigido");
         } else {
@@ -94,11 +121,12 @@ public class GrafoAnalyzer {
         if (regular) {
             tipo.append(", regular");
         }
+    }
 
         // Se não tem características especiais
-        if (tipo.toString().equals("não dirigido") || tipo.toString().equals("dirigido")) {
+        /*if (tipo.toString().equals("não dirigido") || tipo.toString().equals("dirigido")) {
             tipo.append(", nulo");
-        }
+        }*/
 
         return tipo.toString();
     }
@@ -320,113 +348,79 @@ public class GrafoAnalyzer {
      * Método principal para demonstração
      */
     public static void main(String[] args) {
-        // Exemplo de matriz de adjacência para um grafo não dirigido simples
-        /*
-         * int[][] exemploMatriz = {
-         * { 0, 1, 1, 0 },
-         * { 1, 0, 1, 1 },
-         * { 1, 1, 0, 1 },
-         * { 0, 1, 1, 0 }
-         * };
-         * 
-         * GrafoAnalyzer analyzer = new GrafoAnalyzer(exemploMatriz);
-         * 
-         * System.out.println("=== ANÁLISE DO GRAFO ===\n");
-         * 
-         * System.out.println("1. TIPO DO GRAFO:");
-         * System.out.println(analyzer.tipoDoGrafo(exemploMatriz));
-         * System.out.println();
-         * 
-         * System.out.println("2. ARESTAS:");
-         * System.out.println(analyzer.arestasDoGrafo(exemploMatriz));
-         * System.out.println();
-         * 
-         * System.out.println("3. GRAUS:");
-         * System.out.println(analyzer.grausDoVertice(exemploMatriz));
-         * System.out.println();
-         * 
-         * System.out.println("4. BUSCA EM PROFUNDIDADE:");
-         * System.out.println(analyzer.buscaEmProfundidade(exemploMatriz));
-         * 
-         * System.out.println("\n" + "=".repeat(50));
-         * 
-         * // Exemplo adicional: grafo dirigido com laços
-         * System.out.println("\nEXEMPLO 2 - Grafo Dirigido:\n");
-         * int[][] grafoDirigido = {
-         * { 1, 1, 0 },
-         * { 0, 0, 1 },
-         * { 1, 0, 0 }
-         * };
-         * 
-         * GrafoAnalyzer analyzer2 = new GrafoAnalyzer(grafoDirigido);
-         * 
-         * System.out.println("1. TIPO DO GRAFO:");
-         * System.out.println(analyzer2.tipoDoGrafo(grafoDirigido));
-         * System.out.println();
-         * 
-         * System.out.println("2. ARESTAS:");
-         * System.out.println(analyzer2.arestasDoGrafo(grafoDirigido));
-         * System.out.println();
-         * 
-         * System.out.println("3. GRAUS:");
-         * System.out.println(analyzer2.grausDoVertice(grafoDirigido));
-         * System.out.println();
-         * 
-         * System.out.println("4. BUSCA EM PROFUNDIDADE:");
-         * System.out.println(analyzer2.buscaEmProfundidade(grafoDirigido));
-         */
-
+        int x = 1;
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Tamanho da matriz: ");
-        int x = sc.nextInt();
-        int matriz[][] = new int[x][x];
+        while (x != 0) {
 
-        for (int i = 0; i < matriz.length; i++) { // Linhas
-            for (int j = 0; j < matriz[i /* ou 0 */].length; j++) { // Colunas
-                System.out.print(matriz[i][j] + " ");
+            System.out.print("Tamanho da matriz ou 0 para sair: ");
+            x = sc.nextInt();
+
+            if (x == 0) {
+                return;
             }
-            System.out.println("");
-        }
 
-        for (int linha = 0; linha < matriz.length; linha++) {
-            for (int coluna = 0; coluna < matriz[linha].length; coluna++) {
-                System.out.print("Ligação[" + linha + "][" + coluna + "]: ");
-                matriz[linha][coluna] = sc.nextInt();
-                for (int i = 0; i < matriz.length; i++) { // Linhas
-                    for (int j = 0; j < matriz[i /* ou 0 */].length; j++) { // Colunas
-                        System.out.print(matriz[i][j] + " ");
-                    }
-                    System.out.println("");
+            while (x < 0) {
+                System.out.println("Tamanho da matriz deve ser maior que 0");
+
+                System.out.print("Tamanho da matriz ou 0 para sair: ");
+                x = sc.nextInt();
+            }
+
+            int matriz[][] = new int[x][x];
+
+            for (int i = 0; i < matriz.length; i++) { // Linhas
+                for (int j = 0; j < matriz[i /* ou 0 */].length; j++) { // Colunas
+                    System.out.print(matriz[i][j] + " ");
                 }
-                // matriz[linha][coluna] = sc.nextInt();
+                System.out.println("");
             }
-        }
-        System.out.println("\nMATRIZ FINAL: ");
-        for (int i = 0; i < matriz.length; i++) { // Linhas
-            for (int j = 0; j < matriz[i /* ou 0 */].length; j++) { // Colunas
-                System.out.print(matriz[i][j] + " ");
+
+            for (int linha = 0; linha < matriz.length; linha++) {
+                for (int coluna = 0; coluna < matriz[linha].length; coluna++) {
+                    System.out.print("Ligação[" + linha + "][" + coluna + "]: ");
+                    matriz[linha][coluna] = sc.nextInt();
+                    for (int i = 0; i < matriz.length; i++) { // Linhas
+                        for (int j = 0; j < matriz[i /* ou 0 */].length; j++) { // Colunas
+                            System.out.print(matriz[i][j] + " ");
+                        }
+                        System.out.println("");
+                    }
+                    // matriz[linha][coluna] = sc.nextInt();
+                }
             }
-            System.out.println("");
+            System.out.println("\nMATRIZ FINAL: ");
+            for (int i = 0; i < matriz.length; i++) { // Linhas
+                for (int j = 0; j < matriz[i /* ou 0 */].length; j++) { // Colunas
+                    System.out.print(matriz[i][j] + " ");
+                }
+                System.out.println("");
+            }
+
+            GrafoAnalyzer analyzer3 = new GrafoAnalyzer(matriz);
+
+            System.out.println("\n1. TIPO DO GRAFO:");
+            System.out.println(analyzer3.tipoDoGrafo(matriz));
+            System.out.println();
+
+            if (!analyzer3.nulo) {
+
+            System.out.println("2. ARESTAS:");
+            System.out.println(analyzer3.arestasDoGrafo(matriz));
+            System.out.println();
+
+            System.out.println("3. GRAUS:");
+            System.out.println(analyzer3.grausDoVertice(matriz));
+            System.out.println();
+
+            System.out.println("4. BUSCA EM PROFUNDIDADE:");
+            System.out.println(analyzer3.buscaEmProfundidade(matriz));
+
+            }
+
+            System.out.println("-------------------------------------------\n");
+
         }
-
-        GrafoAnalyzer analyzer3 = new GrafoAnalyzer(matriz);
-
-        System.out.println("\n1. TIPO DO GRAFO:");
-        System.out.println(analyzer3.tipoDoGrafo(matriz));
-        System.out.println();
-
-        System.out.println("2. ARESTAS:");
-        System.out.println(analyzer3.arestasDoGrafo(matriz));
-        System.out.println();
-
-        System.out.println("3. GRAUS:");
-        System.out.println(analyzer3.grausDoVertice(matriz));
-        System.out.println();
-
-        System.out.println("4. BUSCA EM PROFUNDIDADE:");
-        System.out.println(analyzer3.buscaEmProfundidade(matriz));
-
         sc.close();
     }
 }
