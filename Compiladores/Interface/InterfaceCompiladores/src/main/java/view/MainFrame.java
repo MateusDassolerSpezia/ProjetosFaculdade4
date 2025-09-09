@@ -7,14 +7,13 @@ import java.awt.event.*;
 import java.io.File;
 
 /**
- * Implementa a interface solicitada no enunciado.
- * - Janela 1500x800, não redimensionável.
- * - Barra de ferramentas com ícones, nomes e atalhos.
- * - Editor com numeração de linhas e barras de rolagem sempre visíveis.
- * - Área de mensagens somente leitura e barras de rolagem sempre visíveis.
- * - Barra de status com pasta e nome do arquivo aberto.
- * - Ações: novo, abrir, salvar, copiar, colar, recortar, compilar(F7), equipe(F1).
- * - Botão salvar com ícones dinâmicos baseados no estado do arquivo.
+ * Implementa a interface solicitada no enunciado. - Janela 1500x800, não
+ * redimensionável. - Barra de ferramentas com ícones, nomes e atalhos. - Editor
+ * com numeração de linhas e barras de rolagem sempre visíveis. - Área de
+ * mensagens somente leitura e barras de rolagem sempre visíveis. - Barra de
+ * status com pasta e nome do arquivo aberto. - Ações: novo, abrir, salvar,
+ * copiar, colar, recortar, compilar(F7), equipe(F1). - Botão salvar com ícones
+ * dinâmicos baseados no estado do arquivo.
  */
 public class MainFrame extends JFrame {
 
@@ -22,7 +21,7 @@ public class MainFrame extends JFrame {
     private final JTextArea areaMensagens = new JTextArea();
     private final JLabel barraStatus = new JLabel(" ");
     private File arquivoAtual = null;
-    
+
     // Referência ao botão salvar para poder atualizá-lo dinamicamente
     private JButton btnSalvar;
 
@@ -84,13 +83,25 @@ public class MainFrame extends JFrame {
         ActionMap am = root.getActionMap();
 
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK), "novo");
-        am.put("novo", new AbstractAction() { public void actionPerformed(ActionEvent e) { acaoNovo(); } });
+        am.put("novo", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                acaoNovo();
+            }
+        });
 
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK), "abrir");
-        am.put("abrir", new AbstractAction() { public void actionPerformed(ActionEvent e) { acaoAbrir(); } });
+        am.put("abrir", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                acaoAbrir();
+            }
+        });
 
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), "salvar");
-        am.put("salvar", new AbstractAction() { public void actionPerformed(ActionEvent e) { acaoSalvar(); } });
+        am.put("salvar", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                acaoSalvar();
+            }
+        });
 
         // Copiar/Colar/Recortar: também já existem no JTextArea, mas deixamos globais
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK), DefaultEditorKit.copyAction);
@@ -103,10 +114,18 @@ public class MainFrame extends JFrame {
         am.put(DefaultEditorKit.cutAction, new DefaultEditorKit.CutAction());
 
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "compilar");
-        am.put("compilar", new AbstractAction() { public void actionPerformed(ActionEvent e) { acaoCompilar(); } });
+        am.put("compilar", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                acaoCompilar();
+            }
+        });
 
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "equipe");
-        am.put("equipe", new AbstractAction() { public void actionPerformed(ActionEvent e) { acaoEquipe(); } });
+        am.put("equipe", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                acaoEquipe();
+            }
+        });
     }
 
     private JToolBar criarToolBar() {
@@ -115,9 +134,9 @@ public class MainFrame extends JFrame {
 
         JButton btnNovo = criarBotao("novo", "Novo [Ctrl+N]", "novo.png", e -> acaoNovo());
         JButton btnAbrir = criarBotao("abrir", "Abrir [Ctrl+O]", "abrir.png", e -> acaoAbrir());
-        
+
         btnSalvar = criarBotao("salvar", "Salvar [Ctrl+S]", "salvarComo.png", e -> acaoSalvar());
-        
+
         JButton btnCopiar = criarBotao("copiar", "Copiar [Ctrl+C]", "copiar.png", e -> editor.copy());
         JButton btnColar = criarBotao("colar", "Colar [Ctrl+V]", "colar.png", e -> editor.paste());
         JButton btnRecortar = criarBotao("recortar", "Recortar [Ctrl+X]", "recortar.png", e -> editor.cut());
@@ -125,7 +144,7 @@ public class MainFrame extends JFrame {
         JButton btnEquipe = criarBotao("equipe", "Equipe [F1]", "equipe.png", e -> acaoEquipe());
 
         Dimension tam = new Dimension(140, 48);
-        for (JButton b : new JButton[]{btnNovo,btnAbrir,btnSalvar,btnCopiar,btnColar,btnRecortar,btnCompilar,btnEquipe}) {
+        for (JButton b : new JButton[]{btnNovo, btnAbrir, btnSalvar, btnCopiar, btnColar, btnRecortar, btnCompilar, btnEquipe}) {
             b.setFocusable(false);
             b.setPreferredSize(tam);
             bar.add(b);
@@ -142,13 +161,16 @@ public class MainFrame extends JFrame {
 
     private Icon carregarIcone(String resourceName) {
         java.net.URL url = getClass().getResource("/icons/" + resourceName);
-        if (url == null) return UIManager.getIcon("FileView.fileIcon");
+        if (url == null) {
+            return UIManager.getIcon("FileView.fileIcon");
+        }
         ImageIcon icon = new ImageIcon(url);
         return icon;
     }
-    
+
     /**
-     * Atualiza o ícone e texto do botão salvar baseado no estado atual do arquivo
+     * Atualiza o ícone e texto do botão salvar baseado no estado atual do
+     * arquivo
      */
     private void atualizarBotaoSalvar() {
         if (btnSalvar != null) {
@@ -178,15 +200,15 @@ public class MainFrame extends JFrame {
     private void acaoAbrir() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        
+
         // Configura filtro para aceitar apenas arquivos .txt
-        javax.swing.filechooser.FileNameExtensionFilter filtroTxt = 
-            new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Texto (*.txt)", "txt");
+        javax.swing.filechooser.FileNameExtensionFilter filtroTxt
+                = new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Texto (*.txt)", "txt");
         chooser.setFileFilter(filtroTxt);
         chooser.setAcceptAllFileFilterUsed(false); // Remove a opção "All Files"
-        
+
         int op = chooser.showOpenDialog(this);
-        
+
         if (op == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             try {
@@ -210,13 +232,13 @@ public class MainFrame extends JFrame {
                 // Modo "Salvar Como"
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                
+
                 // Configura filtro para salvar apenas arquivos .txt
-                javax.swing.filechooser.FileNameExtensionFilter filtroTxt = 
-                    new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Texto (*.txt)", "txt");
+                javax.swing.filechooser.FileNameExtensionFilter filtroTxt
+                        = new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Texto (*.txt)", "txt");
                 chooser.setFileFilter(filtroTxt);
                 chooser.setAcceptAllFileFilterUsed(false); // Remove a opção "All Files"
-                
+
                 int op = chooser.showSaveDialog(this);
                 if (op != JFileChooser.APPROVE_OPTION) {
                     // Se cancelou, não faz nada - mantém mensagens existentes
@@ -238,7 +260,159 @@ public class MainFrame extends JFrame {
     }
 
     private void acaoCompilar() {
-        areaMensagens.setText("compilação de programas ainda não implementada");
+        //LineNumberView linha = new LineNumberView(editor);
+        areaMensagens.setText("");
+        Lexico lexico = new Lexico();
+        lexico.setInput(editor.getText());
+        try {
+            Token t = null;
+            while ((t = lexico.nextToken()) != null) {
+                System.out.println(t.getLexeme());
+
+                // só escreve o lexema, necessário escrever t.getId, t.getPosition()
+                //t.getId(); //- retorna o identificador da classe (ver Constants.java) 
+                switch (t.getId()) {
+                    case 2:
+                        areaMensagens.append(t.getPosition() + " identificador " + t.getLexeme() + "\n");
+                        break;
+                    case 3:
+                        areaMensagens.append("constante_int \n");
+                        break;
+                    case 4:
+                        areaMensagens.append("constante_float \n");
+                        break;
+                    case 5:
+                        areaMensagens.append("constante_string \n");
+                        break;
+                    case 6:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 7:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 8:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 9:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 10:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 11:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 12:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 13:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 14:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 15:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 16:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 17:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 18:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 19:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 20:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 21:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 22:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 23:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 24:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 25:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 26:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 27:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 28:
+                        areaMensagens.append("palavra reservada \n");
+                        break;
+                    case 29:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 30:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 31:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 32:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 33:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 34:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 35:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 36:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 37:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 38:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 39:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 40:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 41:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                    case 42:
+                        areaMensagens.append("simbolo especial \n");
+                        break;
+                }
+
+                // necessário adaptar, pois deve ser apresentada a classe por extenso
+                // t.getPosition () - retorna a posição inicial do lexema no editor 
+                // necessário adaptar para mostrar a linha	
+                // esse código apresenta os tokens enquanto não ocorrer erro
+                // no entanto, os tokens devem ser apresentados SÓ se não ocorrer erro,
+                // necessário adaptar para atender o que foi solicitado		   
+            }
+            areaMensagens.append("programa compilado com sucesso");
+        } catch (LexicalError e) {  // tratamento de erros
+            areaMensagens.setText(e.getMessage() + " em " + e.getPosition());
+
+            e.getMessage(); //- retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
+            // necessário adaptar conforme o enunciado da parte 2
+            e.getPosition(); //- retorna a posição inicial do erro 
+            // necessário adaptar para mostrar a linha  
+        }
     }
 
     private void acaoEquipe() {
