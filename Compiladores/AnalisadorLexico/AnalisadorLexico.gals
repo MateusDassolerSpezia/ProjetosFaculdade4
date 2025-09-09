@@ -1,0 +1,73 @@
+#Options
+GenerateScanner = true
+GenerateParser = false
+Language = Java
+ScannerName = Lexico
+ScannerCaseSensitive = true
+ScannerTable = Compact
+Input = Stream
+#RegularDefinitions
+mai: [A-Z]
+min: [a-z]
+dig: [0-9]
+
+letra: {mai} | {min}
+
+//Comentario de linha:
+comentLinha: \-\- [^\n]*
+
+//Comentario de bloco:
+comentBloco: "{" [^"{""}"]* "}"
+#Tokens
+id: ({mai}?{min}) ({mai}?{min})* (_{dig}+)?
+cInt: ([1-9] {dig}? {dig}? {dig}? {dig}?) | 0
+cFloat: (([1-9] {dig}? {dig}? {dig}? {dig}?) | 0) "." (({dig}? {dig}? {dig}? {dig}? [1-9]) | 0)
+cString: \" [^\n\"\\]* \"
+
+//Palavras reservadas
+pr_add       = id: "add"
+pr_and       = id: "and"
+pr_begin     = id: "begin"
+pr_bool      = id: "bool"
+pr_count     = id: "count"
+pr_delete    = id: "delete"
+pr_do        = id: "do"
+pr_elementof = id: "elementOf"
+pr_else      = id: "else"
+pr_end       = id: "end"
+pr_false     = id: "false"
+pr_float     = id: "float"
+pr_if        = id: "if"
+pr_int 	    = id: "int"
+pr_list 	    = id: "list"
+pr_not 	    = id: "not"
+pr_or 	    = id: "or"
+pr_print     = id: "print"
+pr_read      = id: "read"
+pr_size      = id: "size"
+pr_string    = id: "string"
+pr_true      = id: "true"
+pr_until     = id: "until"
+
+//Simbolos especiais
+"+"
+"-"
+"*"
+"/"
+"=="
+"~="
+"<"
+">"
+"="
+"<-"
+"("
+")"
+";"
+","
+
+//Reconhecer e ignorar caracteres de formação 
+:[\n\t\s]
+
+//Reconhecer e ignorar comentários:
+:!{comentBloco}
+:!{comentLinha}
