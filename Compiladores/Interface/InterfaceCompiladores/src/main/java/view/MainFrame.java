@@ -259,6 +259,16 @@ public class MainFrame extends JFrame {
         }
     }
 
+    private int getLineFromPosition(String text, int position) {
+        int line = 1;
+        for (int i = 0; i < position && i < text.length(); i++) {
+            if (text.charAt(i) == '\n') {
+                line++;
+            }
+        }
+        return line;
+    }
+
     private void acaoCompilar() {
         //LineNumberView linha = new LineNumberView(editor);
         areaMensagens.setText("");
@@ -267,133 +277,135 @@ public class MainFrame extends JFrame {
         try {
             Token t = null;
             while ((t = lexico.nextToken()) != null) {
-                System.out.println(t.getLexeme());
+                //System.out.println(t.getLexeme());
 
                 // só escreve o lexema, necessário escrever t.getId, t.getPosition()
                 //t.getId(); //- retorna o identificador da classe (ver Constants.java) 
+                int line = getLineFromPosition(editor.getText(), t.getPosition());
+                
                 switch (t.getId()) {
                     case 2:
-                        areaMensagens.append(t.getPosition() + " identificador " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " identificador " + t.getLexeme() + "\n");
                         break;
                     case 3:
-                        areaMensagens.append("constante_int \n");
+                        areaMensagens.append(line + " constante_int " + t.getLexeme() + "\n");
                         break;
                     case 4:
-                        areaMensagens.append("constante_float \n");
+                        areaMensagens.append(line + " constante_float " + t.getLexeme() + "\n");
                         break;
                     case 5:
-                        areaMensagens.append("constante_string \n");
+                        areaMensagens.append(line + " constante_string " + t.getLexeme() + "\n");
                         break;
                     case 6:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 7:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 8:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 9:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 10:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 11:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 12:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 13:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 14:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 15:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 16:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 17:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 18:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 19:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 20:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 21:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 22:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 23:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 24:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 25:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 26:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 27:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 28:
-                        areaMensagens.append("palavra reservada \n");
+                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 29:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 30:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 31:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 32:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 33:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 34:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 35:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 36:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 37:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 38:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 39:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 40:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 41:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 42:
-                        areaMensagens.append("simbolo especial \n");
+                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
                         break;
                 }
 
@@ -404,14 +416,17 @@ public class MainFrame extends JFrame {
                 // no entanto, os tokens devem ser apresentados SÓ se não ocorrer erro,
                 // necessário adaptar para atender o que foi solicitado		   
             }
-            areaMensagens.append("programa compilado com sucesso");
+            areaMensagens.append("\nprograma compilado com sucesso");
         } catch (LexicalError e) {  // tratamento de erros
-            areaMensagens.setText(e.getMessage() + " em " + e.getPosition());
+            //areaMensagens.setText(e.getMessage() + " em " + e.getPosition());
 
-            e.getMessage(); //- retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
+            //e.getMessage(); //- retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
             // necessário adaptar conforme o enunciado da parte 2
-            e.getPosition(); //- retorna a posição inicial do erro 
+            //e.getPosition(); //- retorna a posição inicial do erro 
             // necessário adaptar para mostrar a linha  
+            String source = editor.getText(); // seu componente de edição
+            int line = getLineFromPosition(source, e.getPosition());
+            areaMensagens.setText("Erro na linha " + line + ": " + e.getMessage());
         }
     }
 
