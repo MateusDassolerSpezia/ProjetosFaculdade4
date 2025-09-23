@@ -1,0 +1,136 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Compact
+Input = String
+Parser = LL
+#RegularDefinitions
+mai: [A-Z]
+min: [a-z]
+dig: [0-9]
+
+letra: {mai} | {min}
+
+//Comentario de linha:
+comentLinha: \-\- [^\n]*
+
+//Comentario de bloco:
+comentBloco: "{" [^"{""}"]* "}"
+#Tokens
+id: ({mai}?{min}) ({mai}?{min})* (_{dig}+)?
+cInt: ([1-9] {dig}? {dig}? {dig}? {dig}?) | 0
+cFloat: (([1-9] {dig}? {dig}? {dig}? {dig}?) | 0) "." (({dig}? {dig}? {dig}? {dig}? [1-9]) | 0)
+cString: \" [^\n\"\\]* \"
+
+//Palavras reservadas
+pr_add       = id: "add"
+pr_and       = id: "and"
+pr_begin     = id: "begin"
+pr_bool      = id: "bool"
+pr_count     = id: "count"
+pr_delete    = id: "delete"
+pr_do        = id: "do"
+pr_elementof = id: "elementOf"
+pr_else      = id: "else"
+pr_end       = id: "end"
+pr_false     = id: "false"
+pr_float     = id: "float"
+pr_if        = id: "if"
+pr_int 	    = id: "int"
+pr_list 	    = id: "list"
+pr_not 	    = id: "not"
+pr_or 	    = id: "or"
+pr_print     = id: "print"
+pr_read      = id: "read"
+pr_size      = id: "size"
+pr_string    = id: "string"
+pr_true      = id: "true"
+pr_until     = id: "until"
+
+//Simbolos especiais
+"+"
+"-"
+"*"
+"/"
+"=="
+"~="
+"<"
+">"
+"="
+"<-"
+"("
+")"
+";"
+","
+
+//Reconhecer e ignorar caracteres de formação 
+:[\n\t\s]
+
+//Reconhecer e ignorar comentários:
+:!{comentBloco}
+:!{comentLinha}
+#NonTerminals
+<programa>
+<lista_de_instrucoes>
+<instrucao>
+<declaracao_de_variaveis>
+<comando>
+<tipo>
+<lista_de_identificadores>
+<tipo_simples>
+<tipo_lista>
+<repete_id>
+<comando_de_atribuicao>
+<comando_de_manipulacao_de_listas>
+<comando_de_entrada_de_dados>
+<comando_de_saida_de_dados>
+<comando_de_selecao>
+<comando_de_repeticao>
+<expressao>
+<elemento>
+<posicao>
+<lista_de_entrada>
+<string>
+<repete_id_entrada> 
+<lista_de_expressoes>
+<repete_expressao>
+<lista_de_comandos>
+<repete_comando>
+#Grammar
+<programa> ::= pr_begin <lista_de_instrucoes> pr_end ;
+<lista_de_instrucoes> ::= <instrucao> | <instrucao> <lista_de_instrucoes> ;
+<instrucao> ::= <declaracao_de_variaveis> | <comando> ;
+<declaracao_de_variaveis> ::= <tipo> <lista_de_identificadores> ;
+<tipo> ::= <tipo_simples> | <tipo_lista> ;
+<tipo_simples> ::= pr_bool | pr_int | pr_float | pr_string ;
+<tipo_lista> ::= pr_list "(" <tipo_simples> "," cInt ")" ;
+<lista_de_identificadores> ::= id <repete_id> ;
+<repete_id> ::= "," id | î ;
+
+<comando> ::= <comando_de_atribuicao> | <comando_de_manipulacao_de_listas> | <comando_de_entrada_de_dados> | <comando_de_saida_de_dados> | <comando_de_selecao> | <comando_de_repeticao> ;
+
+<comando_de_atribuicao> ::= id "=" <expressao> | id "<-" <expressao> ;
+
+<comando_de_manipulacao_de_listas> ::= id pr_add "(" <elemento> "," <posicao> ")" | id pr_delete "(" <posicao> ")" ;
+<elemento> ::= <expressao> ;
+<posicao> ::= <expressao> ;
+
+<comando_de_entrada_de_dados> ::= pr_read "(" <lista_de_entrada> ")" ;
+<lista_de_entrada> ::= <string> id <repete_id_entrada> ;
+<string> ::= cString "," | î ;
+<repete_id_entrada> ::= "," <string> id <repete_id_entrada> | î ;
+
+<comando_de_saida_de_dados> ::= pr_print "(" <lista_de_expressoes> ")" ;
+<lista_de_expressoes> ::= <expressao> <repete_expressao> ;
+<repete_expressao> ::= "," <expressao> <repete_expressao> | î ;
+
+<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> pr_else <lista_de_comandos> pr_end | pr_if <expressao> <lista_de_comandos> pr_end ;
+<lista_de_comandos> ::= <comando> <repete_comando> ;
+<repete_comando> ::= <comando> <repete_comando> | î ;
+
+<comando_de_repeticao> ::= pr_do <lista_de_comandos> pr_until <expressao> ;
