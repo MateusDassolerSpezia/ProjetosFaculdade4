@@ -274,15 +274,15 @@ public class MainFrame extends JFrame {
         areaMensagens.setText("");
         Lexico lexico = new Lexico();
         lexico.setInput(editor.getText());
+        Token t = null;
         try {
-            Token t = null;
+            t = null;
             while ((t = lexico.nextToken()) != null) {
                 //System.out.println(t.getLexeme());
-
                 // só escreve o lexema, necessário escrever t.getId, t.getPosition()
                 //t.getId(); //- retorna o identificador da classe (ver Constants.java) 
                 int line = getLineFromPosition(editor.getText(), t.getPosition());
-                
+
                 switch (t.getId()) {
                     case 2:
                         areaMensagens.append(line + " identificador " + t.getLexeme() + "\n");
@@ -366,46 +366,46 @@ public class MainFrame extends JFrame {
                         areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
                         break;
                     case 29:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 30:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 31:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 32:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 33:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 34:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 35:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 36:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 37:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 38:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 39:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 40:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 41:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                     case 42:
-                        areaMensagens.append(line + " simbolo especial " + t.getLexeme() + "\n");
+                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                 }
 
@@ -416,17 +416,32 @@ public class MainFrame extends JFrame {
                 // no entanto, os tokens devem ser apresentados SÓ se não ocorrer erro,
                 // necessário adaptar para atender o que foi solicitado		   
             }
-            areaMensagens.append("\nprograma compilado com sucesso");
+            if (editor.getText().isBlank()) {
+                areaMensagens.append("programa compilado com sucesso");
+            } else {
+                areaMensagens.append("\nprograma compilado com sucesso");
+            }
         } catch (LexicalError e) {  // tratamento de erros
             //areaMensagens.setText(e.getMessage() + " em " + e.getPosition());
-
             //e.getMessage(); //- retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
             // necessário adaptar conforme o enunciado da parte 2
             //e.getPosition(); //- retorna a posição inicial do erro 
             // necessário adaptar para mostrar a linha  
-            String source = editor.getText(); // seu componente de edição
+
+            String source = editor.getText();
             int line = getLineFromPosition(source, e.getPosition());
-            areaMensagens.setText("Erro na linha " + line + ": " + e.getMessage());
+
+            String wrongLexeme = "";
+            if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
+                // se for comentário de bloco mal fechado ou string quebrada,
+                // pode ser que seja mais de 1 caractere, mas pelo menos pegamos o símbolo que deu problema
+                wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
+            }
+            if (e.getMessage().equals("símbolo inválido")) {
+                areaMensagens.setText("linha " + line + ": " + wrongLexeme + " " + e.getMessage());
+            } else {
+                areaMensagens.setText("linha " + line + ": " + e.getMessage());
+            }
         }
     }
 
