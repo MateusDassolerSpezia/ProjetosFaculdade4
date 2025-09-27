@@ -987,7 +987,7 @@ public interface ScannerConstants
         "",
         "identificador inválido", //"Erro identificando id",
         "",
-        "comentario inválido ou não finalizado", //"Erro identificando <ignorar>",
+        "comentário inválido ou não finalizado", //"Erro identificando <ignorar>",
         "símbolo inválido", //"Erro identificando \"~=\"",
         "",
         "",
