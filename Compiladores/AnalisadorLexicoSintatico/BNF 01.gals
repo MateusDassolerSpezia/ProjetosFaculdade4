@@ -9,6 +9,7 @@ ScannerCaseSensitive = true
 ScannerTable = Compact
 Input = String
 Parser = LL
+
 #RegularDefinitions
 mai: [A-Z]
 min: [a-z]
@@ -157,7 +158,7 @@ pr_until     = id: "until"
 <repete_expressao> ::= "," <expressao> <repete_expressao> | î ;
 
 //<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> pr_else <lista_de_comandos> pr_end | pr_if <expressao> <lista_de_comandos> pr_end ;
-<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> <comando_de_selecao1> pr_end;
+<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> <comando_de_selecao1> pr_end ;
 <comando_de_selecao1> ::= î | pr_else <lista_de_comandos> ;
 <lista_de_comandos> ::= <comando> ";" <repete_comando> ;
 <repete_comando> ::= <comando> ";" <repete_comando> | î ;
