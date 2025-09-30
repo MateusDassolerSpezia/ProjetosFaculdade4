@@ -35,7 +35,7 @@ pr_bool      = id: "bool"
 pr_count     = id: "count"
 pr_delete    = id: "delete"
 pr_do        = id: "do"
-pr_elementof = id: "elementOf"
+pr_elementOf = id: "elementOf"
 pr_else      = id: "else"
 pr_end       = id: "end"
 pr_false     = id: "false"
@@ -77,19 +77,24 @@ pr_until     = id: "until"
 #NonTerminals
 <programa>
 <lista_de_instrucoes>
+<lista_de_instrucoes1>
 <instrucao>
 <declaracao_de_variaveis>
 <comando>
+<comando1>
 <tipo>
 <lista_de_identificadores>
 <tipo_simples>
 <tipo_lista>
 <repete_id>
-<comando_de_atribuicao>
-<comando_de_manipulacao_de_listas>
+//<comando_de_atribuicao>
+<comando_de_atribuicao1>
+//<comando_de_manipulacao_de_listas>
+<comando_de_manipulacao_de_listas1>
 <comando_de_entrada_de_dados>
 <comando_de_saida_de_dados>
 <comando_de_selecao>
+<comando_de_selecao1>
 <comando_de_repeticao>
 <expressao>
 <elemento>
@@ -101,22 +106,44 @@ pr_until     = id: "until"
 <repete_expressao>
 <lista_de_comandos>
 <repete_comando>
+
+<expressao_>
+<valor> 
+<relacional> 
+<relacional_>
+<operador_relacional>
+<aritmetica>
+<aritmetica_>
+<termo>
+<termo_> 
+<fator>
+<fator_>
 #Grammar
 <programa> ::= pr_begin <lista_de_instrucoes> pr_end ;
-<lista_de_instrucoes> ::= <instrucao> | <instrucao> <lista_de_instrucoes> ;
+
+//<lista_de_instrucoes> ::= <instrucao> ";" | <instrucao> ";" <lista_de_instrucoes> ;
+<lista_de_instrucoes> ::= <instrucao> ";" <lista_de_instrucoes1> ;
+<lista_de_instrucoes1> ::= <lista_de_instrucoes> | î ;
+
 <instrucao> ::= <declaracao_de_variaveis> | <comando> ;
 <declaracao_de_variaveis> ::= <tipo> <lista_de_identificadores> ;
 <tipo> ::= <tipo_simples> | <tipo_lista> ;
 <tipo_simples> ::= pr_bool | pr_int | pr_float | pr_string ;
 <tipo_lista> ::= pr_list "(" <tipo_simples> "," cInt ")" ;
 <lista_de_identificadores> ::= id <repete_id> ;
-<repete_id> ::= "," id | î ;
+<repete_id> ::= "," id <repete_id> | î ;
 
-<comando> ::= <comando_de_atribuicao> | <comando_de_manipulacao_de_listas> | <comando_de_entrada_de_dados> | <comando_de_saida_de_dados> | <comando_de_selecao> | <comando_de_repeticao> ;
+//<comando> ::= <comando_de_atribuicao> | <comando_de_manipulacao_de_listas> | <comando_de_entrada_de_dados> | <comando_de_saida_de_dados> | <comando_de_selecao> | <comando_de_repeticao> ;
+<comando> ::= id <comando1> | <comando_de_entrada_de_dados> | <comando_de_saida_de_dados> | <comando_de_selecao> | <comando_de_repeticao> ;
+<comando1> ::= <comando_de_atribuicao1> | <comando_de_manipulacao_de_listas1> ;
 
-<comando_de_atribuicao> ::= id "=" <expressao> | id "<-" <expressao> ;
+//<comando_de_atribuicao> ::= id "=" <expressao> | id "<-" <expressao> ;
+//<comando_de_atribuicao> ::= id <comando_de_atribuicao1> ;
+<comando_de_atribuicao1> ::= "=" <expressao> | "<-" <expressao> ;
 
-<comando_de_manipulacao_de_listas> ::= id pr_add "(" <elemento> "," <posicao> ")" | id pr_delete "(" <posicao> ")" ;
+//<comando_de_manipulacao_de_listas> ::= id pr_add "(" <elemento> "," <posicao> ")" | id pr_delete "(" <posicao> ")" ;
+//<comando_de_manipulacao_de_listas> ::= id <comando_de_manipulacao_de_listas1> ;
+<comando_de_manipulacao_de_listas1> ::= pr_add "(" <elemento> "," <posicao> ")" |  pr_delete "(" <posicao> ")" ;
 <elemento> ::= <expressao> ;
 <posicao> ::= <expressao> ;
 
@@ -129,8 +156,24 @@ pr_until     = id: "until"
 <lista_de_expressoes> ::= <expressao> <repete_expressao> ;
 <repete_expressao> ::= "," <expressao> <repete_expressao> | î ;
 
-<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> pr_else <lista_de_comandos> pr_end | pr_if <expressao> <lista_de_comandos> pr_end ;
-<lista_de_comandos> ::= <comando> <repete_comando> ;
-<repete_comando> ::= <comando> <repete_comando> | î ;
+//<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> pr_else <lista_de_comandos> pr_end | pr_if <expressao> <lista_de_comandos> pr_end ;
+<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> <comando_de_selecao1> pr_end;
+<comando_de_selecao1> ::= î | pr_else <lista_de_comandos> ;
+<lista_de_comandos> ::= <comando> ";" <repete_comando> ;
+<repete_comando> ::= <comando> ";" <repete_comando> | î ;
 
 <comando_de_repeticao> ::= pr_do <lista_de_comandos> pr_until <expressao> ;
+
+
+<expressao> ::= <valor> <expressao_> ;
+<expressao_> ::= î | pr_and <valor> <expressao_> | pr_or <valor> <expressao_> ;
+<valor> ::= <relacional> | pr_true | pr_false | pr_not <valor> ;
+<relacional> ::= <aritmetica> <relacional_> ;
+<relacional_> ::= î | <operador_relacional> <aritmetica> ;
+<operador_relacional>::= "==" | "~=" | "<" | ">" ;
+<aritmetica> ::= <termo> <aritmetica_> ;
+<aritmetica_> ::= î | "+" <termo> <aritmetica_> | "-" <termo> <aritmetica_> ;
+<termo> ::= <fator> <termo_> ;
+<termo_> ::= î | "*" <fator> <termo_> | "/" <fator> <termo_> ;
+<fator> ::= id <fator_> | cInt | cFloat | cString | "(" <expressao> ")" | "+" <fator> | "-" <fator> ;
+<fator_> ::= î | pr_count | pr_size | pr_elementOf "(" <expressao> ")" ; 
