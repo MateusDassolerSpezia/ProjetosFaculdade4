@@ -1,4 +1,5 @@
 package view;
+
 public interface ScannerConstants
 {
     int[] SCANNER_TABLE_INDEXES = 
@@ -991,23 +992,23 @@ public interface ScannerConstants
         "símbolo inválido", //"Erro identificando \"~=\"",
         "",
         "",
-        "constante_float inválida", //"Erro identificando cFloat",
+        "constante_float inváida", //"Erro identificando cFloat",
         "",
         "",
         "",
-        "identificador inválido", //"Erro identificando id",
-        "identificador inválido", //"Erro identificando id",
+        "identificador inváido", //"Erro identificando id",
+        "identificador inváido", //"Erro identificando id",
         "",
         "",
         "",
         "",
         "",
-        "constante_float inválida", //"Erro identificando cFloat",
+        "constante_float inváida", //"Erro identificando cFloat",
         "",
         "",
-        "constante_float inválida", //"Erro identificando cFloat",
+        "constante_float inváida", //"Erro identificando cFloat",
         "",
-        "constante_float inválida", //"Erro identificando cFloat",
+        "constante_float inváida", //"Erro identificando cFloat",
         "",
         ""
     };

@@ -273,14 +273,58 @@ public class MainFrame extends JFrame {
         //LineNumberView linha = new LineNumberView(editor);
         areaMensagens.setText("");
         Lexico lexico = new Lexico();
+        Sintatico sintatico = new Sintatico();
+        Semantico semantico = new Semantico();
+        lexico.setInput(editor.getText());
+        try {
+            sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
+            areaMensagens.append("programa compilado com sucesso");
+        } // mensagem: programa compilado com sucesso - na área reservada para mensagens
+        catch (LexicalError e) {
+            String source = editor.getText();
+            int line = getLineFromPosition(source, e.getPosition());
+
+            String wrongLexeme = "";
+            if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
+                // se for comentário de bloco mal fechado ou string quebrada,
+                // pode ser que seja mais de 1 caractere, mas pelo menos pegamos o símbolo que deu problema
+                wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
+            }
+            if (e.getMessage().equals("símbolo inválido")) {
+                areaMensagens.setText("linha " + line + ": " + wrongLexeme + " " + e.getMessage());
+            } else {
+                areaMensagens.setText("linha " + line + ": " + e.getMessage());
+            }
+        } catch (SyntaticError e) {
+            System.out.println(e.getMessage() + " em " + e.getPosition());
+            String source = editor.getText();
+            int line = getLineFromPosition(source, e.getPosition());
+
+            String wrongLexeme = "";
+            if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
+                wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
+            } else {
+                wrongLexeme = "EOF";
+            }
+            areaMensagens.setText("linha " + line + ": " + "encontrado " + sintatico.toString() + " " + "esperado " + e.getMessage());
+            //areaMensagens.setText("linha " + line + ": " + e.getMessage());
+
+            // e.getMessage() são os símbolos esperados
+            // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
+            // necessário adaptar conforme o enunciado da parte 3
+            // e.getPosition() - retorna a posição inicial do erro 
+            // necessário adaptar para mostrar a linha  
+            // necessário mostrar também o símbolo encontrado 
+        } catch (SemanticError e) {
+            // trata erros semânticos na parte 4
+        }
+
+        /*Lexico lexico = new Lexico();
         lexico.setInput(editor.getText());
         Token t = null;
         try {
             t = null;
             while ((t = lexico.nextToken()) != null) {
-                //System.out.println(t.getLexeme());
-                // só escreve o lexema, necessário escrever t.getId, t.getPosition()
-                //t.getId(); //- retorna o identificador da classe (ver Constants.java) 
                 int line = getLineFromPosition(editor.getText(), t.getPosition());
 
                 switch (t.getId()) {
@@ -408,26 +452,13 @@ public class MainFrame extends JFrame {
                         areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
                         break;
                 }
-
-                // necessário adaptar, pois deve ser apresentada a classe por extenso
-                // t.getPosition () - retorna a posição inicial do lexema no editor 
-                // necessário adaptar para mostrar a linha	
-                // esse código apresenta os tokens enquanto não ocorrer erro
-                // no entanto, os tokens devem ser apresentados SÓ se não ocorrer erro,
-                // necessário adaptar para atender o que foi solicitado		   
             }
             if (editor.getText().isBlank()) {
                 areaMensagens.append("programa compilado com sucesso");
             } else {
                 areaMensagens.append("\nprograma compilado com sucesso");
             }
-        } catch (LexicalError e) {  // tratamento de erros
-            //areaMensagens.setText(e.getMessage() + " em " + e.getPosition());
-            //e.getMessage(); //- retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
-            // necessário adaptar conforme o enunciado da parte 2
-            //e.getPosition(); //- retorna a posição inicial do erro 
-            // necessário adaptar para mostrar a linha  
-
+        } catch (LexicalError e) {
             String source = editor.getText();
             int line = getLineFromPosition(source, e.getPosition());
 
@@ -442,7 +473,7 @@ public class MainFrame extends JFrame {
             } else {
                 areaMensagens.setText("linha " + line + ": " + e.getMessage());
             }
-        }
+        }*/
     }
 
     private void acaoEquipe() {

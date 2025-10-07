@@ -1,6 +1,6 @@
 package view;
 
-public interface Constants extends ScannerConstants
+public interface Constants extends ScannerConstants, ParserConstants
 {
     int EPSILON  = 0;
     int DOLLAR   = 1;
@@ -16,7 +16,7 @@ public interface Constants extends ScannerConstants
     int t_pr_count = 10;
     int t_pr_delete = 11;
     int t_pr_do = 12;
-    int t_pr_elementof = 13;
+    int t_pr_elementOf = 13;
     int t_pr_else = 14;
     int t_pr_end = 15;
     int t_pr_false = 16;
