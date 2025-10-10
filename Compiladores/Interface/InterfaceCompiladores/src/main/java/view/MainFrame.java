@@ -296,18 +296,46 @@ public class MainFrame extends JFrame {
                 areaMensagens.setText("linha " + line + ": " + e.getMessage());
             }
         } catch (SyntaticError e) {
-            System.out.println(e.getMessage() + " em " + e.getPosition());
+            String source = editor.getText();
+            int pos = e.getPosition();
+            int line = getLineFromPosition(source, pos);
+
+            String encontrado;
+
+            if (pos >= 0 && pos < source.length()) {
+                // Avança até o fim do lexema (letras, dígitos ou sublinhado)
+                int start = pos;
+                int end = pos;
+                while (start > 0 && Character.isLetterOrDigit(source.charAt(start - 1))) {
+                    start--;
+                }
+                while (end < source.length() && Character.isLetterOrDigit(source.charAt(end))) {
+                    end++;
+                }
+
+                encontrado = source.substring(start, end).trim();
+
+                // Se o lexema estiver vazio (ex: símbolo), pega o caractere direto
+                if (encontrado.isEmpty()) {
+                    encontrado = String.valueOf(source.charAt(pos));
+                }
+            } else {
+                encontrado = "EOF";
+            }
+
+            areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " esperado " + e.getMessage());
+
+            /*System.out.println(e.getMessage() + " em " + e.getPosition());
             String source = editor.getText();
             int line = getLineFromPosition(source, e.getPosition());
-
+            
             String wrongLexeme = "";
             if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
                 wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
             } else {
                 wrongLexeme = "EOF";
             }
-            areaMensagens.setText("linha " + line + ": " + "encontrado " + sintatico.toString() + " " + "esperado " + e.getMessage());
-            //areaMensagens.setText("linha " + line + ": " + e.getMessage());
+            areaMensagens.setText("linha " + line + ": " + "encontrado " + sintatico.toString() + " " + "esperado " + e.getMessage());*/
 
             // e.getMessage() são os símbolos esperados
             // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
