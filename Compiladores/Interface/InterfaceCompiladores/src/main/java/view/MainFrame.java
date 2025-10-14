@@ -299,10 +299,25 @@ public class MainFrame extends JFrame {
             String source = editor.getText();
             int pos = e.getPosition();
             int line = getLineFromPosition(source, pos);
-
+            
+            Token token = lexico.getCurrentToken();
             String encontrado;
 
-            if (pos >= 0 && pos < source.length()) {
+            if (token != null && token.getLexeme() != null && !token.getLexeme().isEmpty()) {
+                encontrado = token.getLexeme();
+            } else if (pos >= 0 && pos < source.length()) {
+                encontrado = String.valueOf(source.charAt(pos));
+            } else {
+                encontrado = "EOF";
+            }
+
+            if (token != null && token.getId() == 5) {
+                areaMensagens.setText("linha " + line + ": encontrado constante_string " + e.getMessage());
+            } else {
+                areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " " + e.getMessage());
+            }
+
+            /*if (pos >= 0 && pos < source.length()) {
                 // Avança até o fim do lexema (letras, dígitos ou sublinhado)
                 int start = pos;
                 int end = pos;
@@ -326,10 +341,8 @@ public class MainFrame extends JFrame {
                 areaMensagens.setText("linha " + line + ": encontrado constante_string" + e.getMessage());
             } else {
                 areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " " + e.getMessage());
-            }
-            
-
-            /*System.out.println(e.getMessage() + " em " + e.getPosition());
+            }*/
+ /*System.out.println(e.getMessage() + " em " + e.getPosition());
             String source = editor.getText();
             int line = getLineFromPosition(source, e.getPosition());
             
@@ -340,7 +353,6 @@ public class MainFrame extends JFrame {
                 wrongLexeme = "EOF";
             }
             areaMensagens.setText("linha " + line + ": " + "encontrado " + sintatico.toString() + " " + "esperado " + e.getMessage());*/
-
             // e.getMessage() são os símbolos esperados
             // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
             // necessário adaptar conforme o enunciado da parte 3

@@ -4,6 +4,7 @@ public class Lexico implements Constants
 {
     private int position;
     private String input;
+    private Token currentToken;
 
     public Lexico()
     {
@@ -19,6 +20,7 @@ public class Lexico implements Constants
     {
         this.input = input;
         setPosition(0);
+        currentToken = null;
     }
 
     public void setPosition(int pos)
@@ -68,10 +70,17 @@ public class Lexico implements Constants
         {
             String lexeme = input.substring(start, end);
             token = lookupToken(token, lexeme);
-            return new Token(token, lexeme, start);
+            currentToken = new Token(token, lexeme, start);
+            //return new Token(token, lexeme, start);
+            return currentToken;
         }
     }
 
+    public Token getCurrentToken() {
+        return currentToken;
+    }
+
+    
     private int nextState(char c, int state)
     {
         int start = SCANNER_TABLE_INDEXES[state];
