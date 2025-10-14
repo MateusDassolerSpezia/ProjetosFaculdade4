@@ -322,8 +322,12 @@ public class MainFrame extends JFrame {
             } else {
                 encontrado = "EOF";
             }
-
-            areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " esperado " + e.getMessage());
+            if (encontrado.equals("\"")) {
+                areaMensagens.setText("linha " + line + ": encontrado constante_string" + e.getMessage());
+            } else {
+                areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " " + e.getMessage());
+            }
+            
 
             /*System.out.println(e.getMessage() + " em " + e.getPosition());
             String source = editor.getText();
