@@ -115,7 +115,7 @@ pr_until     = id: "until"
 <fator>
 <fator_>
 #Grammar
-<programa> ::= pr_begin <lista_de_instrucoes> pr_end ;
+<programa> ::= #100 pr_begin <lista_de_instrucoes> pr_end #101 ;
 
 <lista_de_instrucoes> ::= <instrucao> ";" <lista_de_instrucoes1> ;
 <lista_de_instrucoes1> ::= <lista_de_instrucoes> | î ;
@@ -143,8 +143,8 @@ pr_until     = id: "until"
 <repete_id_entrada> ::= "," <string> id <repete_id_entrada> | î ;
 
 <comando_de_saida_de_dados> ::= pr_print "(" <lista_de_expressoes> ")" ;
-<lista_de_expressoes> ::= <expressao> <repete_expressao> ;
-<repete_expressao> ::= "," <expressao> <repete_expressao> | î ;
+<lista_de_expressoes> ::= <expressao> #102 <repete_expressao> ;
+<repete_expressao> ::= "," <expressao> #102 <repete_expressao> | î ;
 
 <comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> <comando_de_selecao1> pr_end ;
 <comando_de_selecao1> ::= î | pr_else <lista_de_comandos> ;
@@ -164,5 +164,5 @@ pr_until     = id: "until"
 <aritmetica_> ::= î | "+" <termo> <aritmetica_> | "-" <termo> <aritmetica_> ;
 <termo> ::= <fator> <termo_> ;
 <termo_> ::= î | "*" <fator> <termo_> | "/" <fator> <termo_> ;
-<fator> ::= id <fator_> | cInt | cFloat | cString | "(" <expressao> ")" | "+" <fator> | "-" <fator> ;
+<fator> ::= id <fator_> | cInt #103 | cFloat #104 | cString #105 | "(" <expressao> ")" | "+" <fator> | "-" <fator> ;
 <fator_> ::= î | pr_count | pr_size | pr_elementOf "(" <expressao> ")" ; 
