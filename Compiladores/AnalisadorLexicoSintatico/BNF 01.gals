@@ -119,28 +119,28 @@ pr_until     = id: "until"
 
 <lista_de_instrucoes> ::= <instrucao> ";" <lista_de_instrucoes1> ;
 <lista_de_instrucoes1> ::= <lista_de_instrucoes> | î ;
-
 <instrucao> ::= <declaracao_de_variaveis> | <comando> ;
-<declaracao_de_variaveis> ::= <tipo> <lista_de_identificadores> ;
-<tipo> ::= <tipo_simples> | <tipo_lista> ;
-<tipo_simples> ::= pr_bool | pr_int | pr_float | pr_string ;
-<tipo_lista> ::= pr_list "(" <tipo_simples> "," cInt ")" ;
-<lista_de_identificadores> ::= id <repete_id> ;
-<repete_id> ::= "," id <repete_id> | î ;
 
-<comando> ::= id <comando1> | <comando_de_entrada_de_dados> | <comando_de_saida_de_dados> | <comando_de_selecao> | <comando_de_repeticao> ;
+<declaracao_de_variaveis> ::= <tipo> <lista_de_identificadores> #119 ;
+<tipo> ::= <tipo_simples> | <tipo_lista> ;
+<tipo_simples> ::= pr_bool #120 | pr_int #120 | pr_float #120 | pr_string #120 ;
+<tipo_lista> ::= pr_list "(" <tipo_simples> "," cInt ")" ;
+<lista_de_identificadores> ::= id #121 <repete_id> ;
+<repete_id> ::= "," id #121 <repete_id> | î ;
+
+<comando> ::= id #121 <comando1> | <comando_de_entrada_de_dados> | <comando_de_saida_de_dados> | <comando_de_selecao> | <comando_de_repeticao> ;
 <comando1> ::= <comando_de_atribuicao1> | <comando_de_manipulacao_de_listas1> ;
 
-<comando_de_atribuicao1> ::= "=" <expressao> | "<-" <expressao> ;
+<comando_de_atribuicao1> ::= "=" <expressao> #122 | "<-" <expressao> #122;
 
 <comando_de_manipulacao_de_listas1> ::= pr_add "(" <elemento> "," <posicao> ")" |  pr_delete "(" <posicao> ")" ;
 <elemento> ::= <expressao> ;
 <posicao> ::= <expressao> ;
 
 <comando_de_entrada_de_dados> ::= pr_read "(" <lista_de_entrada> ")" ;
-<lista_de_entrada> ::= <string> id <repete_id_entrada> ;
-<string> ::= cString "," | î ;
-<repete_id_entrada> ::= "," <string> id <repete_id_entrada> | î ;
+<lista_de_entrada> ::= <string> id #123 <repete_id_entrada> ;
+<string> ::= cString #124 "," | î ;
+<repete_id_entrada> ::= "," <string> id #123 <repete_id_entrada> | î ;
 
 <comando_de_saida_de_dados> ::= pr_print "(" <lista_de_expressoes> ")" #118 ;
 <lista_de_expressoes> ::= <expressao> #102 <repete_expressao> ;
@@ -164,5 +164,5 @@ pr_until     = id: "until"
 <aritmetica_> ::= î | "+" <termo> #106 <aritmetica_> | "-" <termo> #107 <aritmetica_> ;
 <termo> ::= <fator> <termo_> ;
 <termo_> ::= î | "*" <fator> #108 <termo_> | "/" <fator> #109 <termo_> ;
-<fator> ::= id <fator_> | cInt #103 | cFloat #104 | cString #105 | "(" <expressao> ")" | "+" <fator> | "-" <fator> #110 ;
+<fator> ::= id #130 <fator_> | cInt #103 | cFloat #104 | cString #105 | "(" <expressao> ")" | "+" <fator> | "-" <fator> #110 ;
 <fator_> ::= î | pr_count | pr_size | pr_elementOf "(" <expressao> ")" ; 

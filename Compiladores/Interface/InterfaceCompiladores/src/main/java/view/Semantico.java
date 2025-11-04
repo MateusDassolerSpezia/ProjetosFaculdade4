@@ -53,30 +53,39 @@ public class Semantico implements Constants {
                 break;
 
             case 106:
+                acao106();
                 break;
 
             case 107:
+                acao107();
                 break;
 
             case 108:
+                acao108();
                 break;
 
             case 109:
+                acao109();
                 break;
 
             case 110:
+                acao110();
                 break;
 
             case 111:
+                acao111(token);
                 break;
 
             case 112:
+                acao112();
                 break;
 
             case 113:
+                acao113();
                 break;
 
             case 114:
+                acao114();
                 break;
 
             case 115:
@@ -88,6 +97,7 @@ public class Semantico implements Constants {
                 break;
 
             case 117:
+                acao117();
                 break;
 
             case 118:
@@ -134,30 +144,6 @@ public class Semantico implements Constants {
         //System.out.println("Ação #"+action+", Token: "+token);  
     }
 
-    public void acao105(Token token) {
-        pilhaTipos.add("string");
-        codigo.add("ldstr " + token.getLexeme() + "\n");
-    }
-
-    public void acao104(Token token) {
-        pilhaTipos.add("float64");
-        codigo.add("ldc.r8 " + token.getLexeme() + "\n");
-    }
-
-    public void acao103(Token token) {
-        pilhaTipos.push("int64");
-        codigo.add("ldc.i8 " + token.getLexeme() + "\n");
-        codigo.add("conv.r8\n");
-    }
-
-    public void acao102() {
-        String tipoRetirado = pilhaTipos.pop();
-        if (tipoRetirado.equals("int64")) {
-            codigo.add("conv.i8\n");
-        }
-        codigo.add("call void [mscorlib]System.Console::Write(" + tipoRetirado + ")\n");
-    }
-
     public void acao100() {
         codigo.add(".assembly extern mscorlib {}\n"
                 + ".assembly teste_f{}\n"
@@ -174,8 +160,32 @@ public class Semantico implements Constants {
                 + "}");
     }
 
+    public void acao102() {
+        String tipoRetirado = pilhaTipos.pop();
+        if (tipoRetirado.equals("int64")) {
+            codigo.add("conv.i8\n");
+        }
+        codigo.add("call void [mscorlib]System.Console::Write(" + tipoRetirado + ")\n");
+    }
+
     public void acao118() {
         codigo.add("call void [mscorlib]System.Console::WriteLine()\n");
+    }
+
+    public void acao103(Token token) {
+        pilhaTipos.push("int64");
+        codigo.add("ldc.i8 " + token.getLexeme() + "\n");
+        codigo.add("conv.r8\n");
+    }
+
+    public void acao104(Token token) {
+        pilhaTipos.add("float64");
+        codigo.add("ldc.r8 " + token.getLexeme() + "\n");
+    }
+
+    public void acao105(Token token) {
+        pilhaTipos.add("string");
+        codigo.add("ldstr " + token.getLexeme() + "\n");
     }
 
     public void acao115() {
@@ -278,6 +288,67 @@ public class Semantico implements Constants {
         pilhaTipos.push("bool");
 
         codigo.add("or\n");
+    }
+
+    public void acao120(Token token) {
+        tipo = token.getLexeme();
+    }
+
+    public void acao121(Token token) {
+        listaIdentificadores.add(token.getLexeme());
+    }
+
+    public void acao119() {
+        for (String id : listaIdentificadores) {
+            String tipoIL = "";
+
+            switch (tipo) {
+                case "int":
+                    tipoIL = "int64";
+                    break;
+
+                case "float":
+                    tipoIL = "float64";
+                    break;
+
+                case "string":
+                    tipoIL = "string";
+                    break;
+
+                case "bool":
+                    tipoIL = "bool";
+                    break;
+            }
+            tabelaSimbolos.put(id, tipoIL);
+            codigo.add(".locals (" + tipoIL + " " + id + ")\n");
+        }
+        listaIdentificadores.clear();
+    }
+
+    public void acao122() {
+        String tipoRetirado = pilhaTipos.pop();
+        if (tipoRetirado.equals("int64")) {
+            codigo.add("conv.i8\n");
+        }
+        String id = listaIdentificadores.get(listaIdentificadores.size() - 1);
+
+        codigo.add("stloc " + id + "\n");
+
+        listaIdentificadores.clear();
+    }
+
+    public void acao123(Token token) throws SemanticError {
+        String id = token.getLexeme();
+
+        if (!tabelaSimbolos.containsKey(id)) {
+            throw new SemanticError("identificador não declarado: " + id, token.getPosition());
+        }
+        
+        String tipoId = tabelaSimbolos.get(id);
+        
+        if (tipoId.equals("bool")) {
+            
+        }
     }
 
     public String tipoResultante(String tipo1, String tipo2) {

@@ -268,6 +268,26 @@ public class MainFrame extends JFrame {
         }
         return line;
     }
+    
+    private void criarArquivoIl(String codigoGerado) {
+
+    if (arquivoAtual == null) {
+        return;
+    }
+
+    try {
+        String caminhoOriginal = arquivoAtual.getAbsolutePath();
+
+        String caminhoIl = caminhoOriginal.substring(0, caminhoOriginal.lastIndexOf(".")) + ".il";
+
+        File ilFile = new File(caminhoIl);
+
+        FileUtils.writeFile(ilFile, codigoGerado);
+
+    } catch (Exception e) {
+        areaMensagens.setText("Erro ao criar arquivo IL: " + e.getMessage());
+    }
+}
 
     private void acaoCompilar() {
         //LineNumberView linha = new LineNumberView(editor);
@@ -278,6 +298,7 @@ public class MainFrame extends JFrame {
         lexico.setInput(editor.getText());
         try {
             sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
+            criarArquivoIl(semantico.getCodigoGerado());
             areaMensagens.append("programa compilado com sucesso");
         } // mensagem: programa compilado com sucesso - na área reservada para mensagens
         catch (LexicalError e) {
