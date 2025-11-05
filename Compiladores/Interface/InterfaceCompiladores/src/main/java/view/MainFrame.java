@@ -268,26 +268,26 @@ public class MainFrame extends JFrame {
         }
         return line;
     }
-    
+
     private void criarArquivoIl(String codigoGerado) {
 
-    if (arquivoAtual == null) {
-        return;
+        if (arquivoAtual == null) {
+            return;
+        }
+
+        try {
+            String caminhoOriginal = arquivoAtual.getAbsolutePath();
+
+            String caminhoIl = caminhoOriginal.substring(0, caminhoOriginal.lastIndexOf(".")) + ".il";
+
+            File ilFile = new File(caminhoIl);
+
+            FileUtils.writeFile(ilFile, codigoGerado);
+
+        } catch (Exception e) {
+            areaMensagens.setText("Erro ao criar arquivo IL: " + e.getMessage());
+        }
     }
-
-    try {
-        String caminhoOriginal = arquivoAtual.getAbsolutePath();
-
-        String caminhoIl = caminhoOriginal.substring(0, caminhoOriginal.lastIndexOf(".")) + ".il";
-
-        File ilFile = new File(caminhoIl);
-
-        FileUtils.writeFile(ilFile, codigoGerado);
-
-    } catch (Exception e) {
-        areaMensagens.setText("Erro ao criar arquivo IL: " + e.getMessage());
-    }
-}
 
     private void acaoCompilar() {
         //LineNumberView linha = new LineNumberView(editor);
@@ -320,13 +320,13 @@ public class MainFrame extends JFrame {
             String source = editor.getText();
             int pos = e.getPosition();
             int line = getLineFromPosition(source, pos);
-            
+
             Token token = lexico.getCurrentToken();
             String encontrado;
 
-            if (token != null && token.getLexeme() != null && !token.getLexeme().isEmpty()) {
+            if (token != null && token.getLexeme() != null && !token.getLexeme().isEmpty() && token.getId() != Constants.DOLLAR) {
                 encontrado = token.getLexeme();
-            } else if (pos >= 0 && pos < source.length()) {
+            } else if (pos >= 0 && pos < source.length() && token.getId() != Constants.DOLLAR) {
                 encontrado = String.valueOf(source.charAt(pos));
             } else {
                 encontrado = "EOF";
@@ -337,208 +337,13 @@ public class MainFrame extends JFrame {
             } else {
                 areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " " + e.getMessage());
             }
-
-            /*if (pos >= 0 && pos < source.length()) {
-                // Avança até o fim do lexema (letras, dígitos ou sublinhado)
-                int start = pos;
-                int end = pos;
-                while (start > 0 && Character.isLetterOrDigit(source.charAt(start - 1))) {
-                    start--;
-                }
-                while (end < source.length() && Character.isLetterOrDigit(source.charAt(end))) {
-                    end++;
-                }
-
-                encontrado = source.substring(start, end).trim();
-
-                // Se o lexema estiver vazio (ex: símbolo), pega o caractere direto
-                if (encontrado.isEmpty()) {
-                    encontrado = String.valueOf(source.charAt(pos));
-                }
-            } else {
-                encontrado = "EOF";
-            }
-            if (encontrado.equals("\"")) {
-                areaMensagens.setText("linha " + line + ": encontrado constante_string" + e.getMessage());
-            } else {
-                areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " " + e.getMessage());
-            }*/
- /*System.out.println(e.getMessage() + " em " + e.getPosition());
-            String source = editor.getText();
-            int line = getLineFromPosition(source, e.getPosition());
             
-            String wrongLexeme = "";
-            if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
-                wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
-            } else {
-                wrongLexeme = "EOF";
-            }
-            areaMensagens.setText("linha " + line + ": " + "encontrado " + sintatico.toString() + " " + "esperado " + e.getMessage());*/
-            // e.getMessage() são os símbolos esperados
-            // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
-            // necessário adaptar conforme o enunciado da parte 3
-            // e.getPosition() - retorna a posição inicial do erro 
-            // necessário adaptar para mostrar a linha  
-            // necessário mostrar também o símbolo encontrado 
         } catch (SemanticError e) {
-            // trata erros semânticos na parte 4
-        }
-
-        /*Lexico lexico = new Lexico();
-        lexico.setInput(editor.getText());
-        Token t = null;
-        try {
-            t = null;
-            while ((t = lexico.nextToken()) != null) {
-                int line = getLineFromPosition(editor.getText(), t.getPosition());
-
-                switch (t.getId()) {
-                    case 2:
-                        areaMensagens.append(line + " identificador " + t.getLexeme() + "\n");
-                        break;
-                    case 3:
-                        areaMensagens.append(line + " constante_int " + t.getLexeme() + "\n");
-                        break;
-                    case 4:
-                        areaMensagens.append(line + " constante_float " + t.getLexeme() + "\n");
-                        break;
-                    case 5:
-                        areaMensagens.append(line + " constante_string " + t.getLexeme() + "\n");
-                        break;
-                    case 6:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 7:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 8:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 9:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 10:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 11:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 12:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 13:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 14:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 15:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 16:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 17:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 18:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 19:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 20:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 21:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 22:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 23:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 24:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 25:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 26:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 27:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 28:
-                        areaMensagens.append(line + " palavra reservada " + t.getLexeme() + "\n");
-                        break;
-                    case 29:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 30:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 31:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 32:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 33:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 34:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 35:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 36:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 37:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 38:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 39:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 40:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 41:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                    case 42:
-                        areaMensagens.append(line + " símbolo especial " + t.getLexeme() + "\n");
-                        break;
-                }
-            }
-            if (editor.getText().isBlank()) {
-                areaMensagens.append("programa compilado com sucesso");
-            } else {
-                areaMensagens.append("\nprograma compilado com sucesso");
-            }
-        } catch (LexicalError e) {
             String source = editor.getText();
-            int line = getLineFromPosition(source, e.getPosition());
-
-            String wrongLexeme = "";
-            if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
-                // se for comentário de bloco mal fechado ou string quebrada,
-                // pode ser que seja mais de 1 caractere, mas pelo menos pegamos o símbolo que deu problema
-                wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
-            }
-            if (e.getMessage().equals("símbolo inválido")) {
-                areaMensagens.setText("linha " + line + ": " + wrongLexeme + " " + e.getMessage());
-            } else {
-                areaMensagens.setText("linha " + line + ": " + e.getMessage());
-            }
-        }*/
+            int pos = e.getPosition();
+            int line = getLineFromPosition(source, pos);
+            areaMensagens.setText("linha " + line + ": " + e.getMessage());
+        }
     }
 
     private void acaoEquipe() {

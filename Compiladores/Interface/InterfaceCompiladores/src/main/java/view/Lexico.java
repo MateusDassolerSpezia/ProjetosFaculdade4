@@ -30,9 +30,11 @@ public class Lexico implements Constants
 
     public Token nextToken() throws LexicalError
     {
-        if ( ! hasInput() )
-            return null;
-
+        if ( ! hasInput() ) {
+            currentToken = new Token(DOLLAR, "EOF", position);
+            return currentToken;
+        }
+        
         int start = position;
 
         int state = 0;

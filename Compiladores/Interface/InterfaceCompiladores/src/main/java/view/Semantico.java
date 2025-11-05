@@ -105,39 +105,51 @@ public class Semantico implements Constants {
                 break;
 
             case 119:
+                acao119();
                 break;
 
             case 120:
+                acao120(token);
                 break;
 
             case 121:
+                acao121(token);
                 break;
 
             case 122:
+                acao122();
                 break;
 
             case 123:
+                acao123(token);
                 break;
 
             case 124:
+                acao124(token);
                 break;
 
             case 125:
+                acao125(token);
                 break;
 
             case 126:
+                acao126();
                 break;
 
             case 127:
+                acao127();
                 break;
 
             case 128:
+                acao128();
                 break;
 
             case 129:
+                acao129(token);
                 break;
 
             case 130:
+                acao130(token);
                 break;
 
         }
@@ -341,17 +353,100 @@ public class Semantico implements Constants {
         String id = token.getLexeme();
 
         if (!tabelaSimbolos.containsKey(id)) {
-            throw new SemanticError("identificador não declarado: " + id, token.getPosition());
+            throw new SemanticError("identificador não declarado " + id);
         }
-        
+
         String tipoId = tabelaSimbolos.get(id);
-        
+
         if (tipoId.equals("bool")) {
-            
+            throw new SemanticError(id + " inválido para comando de entrada", token.getPosition());
+        }
+
+        codigo.add("call string [mscorlib]System.Console::ReadLine()\n");
+
+        switch (tipoId) {
+            case "int64":
+                codigo.add("call int64 [mscorlib]System.Int64::Parse(string)\n");
+                break;
+
+            case "float64":
+                codigo.add("call float64 [mscorlib]System.Double::Parse(string)\n");
+                break;
+
+            case "string":
+                break;
+        }
+
+        codigo.add("stloc " + id + "\n");
+    }
+
+    public void acao124(Token token) {
+        codigo.add("ldstr " + token.getLexeme() + "\n");
+        codigo.add("call void [mscorlib]System.Console::Write (string)\n");
+    }
+
+    public void acao130(Token token) {
+        String id = token.getLexeme();
+        String tipoId = tabelaSimbolos.get(id);
+
+        pilhaTipos.push(tipoId);
+        codigo.add("ldloc " + id + "\n");
+
+        if (tipoId.equals("int64")) {
+            codigo.add("conv.r8\n");
         }
     }
 
-    public String tipoResultante(String tipo1, String tipo2) {
+    public void acao125(Token token) throws SemanticError {
+        if (pilhaTipos.isEmpty()) {
+            throw new SemanticError("expressão vazia em comando de seleção", token.getPosition());
+        }
+
+        String tipoRetirado = pilhaTipos.pop();
+
+        if (!tipoRetirado.equals("bool")) {
+            throw new SemanticError("expressão incompatível em comando de seleção", token.getPosition());
+        }
+
+        String novoRotulo1 = gerarRotulo();
+        codigo.add("brfalse " + novoRotulo1 + "\n");
+        pilhaRotulos.push(novoRotulo1);
+    }
+
+    public void acao127() {
+        String novoRotulo2 = gerarRotulo();
+        codigo.add("br " + novoRotulo2 + "\n");
+        String rotuloDesempilhado = pilhaRotulos.pop();
+        codigo.add(rotuloDesempilhado + ":\n");
+        pilhaRotulos.push(novoRotulo2);
+    }
+
+    public void acao126() {
+        String rotuloDesempilhado = pilhaRotulos.pop();
+        codigo.add(rotuloDesempilhado + ":\n");
+    }
+
+    public void acao128() {
+        String novoRotulo = gerarRotulo();
+        codigo.add(novoRotulo + ":\n");
+        pilhaRotulos.push(novoRotulo);
+    }
+
+    public void acao129(Token token) throws SemanticError {
+        String tipoRetirado = pilhaTipos.pop();
+        if (!tipoRetirado.equals("bool")) {
+            throw new SemanticError("expressão incompatível em comando de repetição", token.getPosition());
+        }
+        String rotuloDesempilhado = pilhaRotulos.pop();
+        codigo.add("brfalse " + rotuloDesempilhado + "\n");
+    }
+
+    private String gerarRotulo() {
+        contadorRotulos++;
+        return "L" + contadorRotulos;
+    }
+
+    private String tipoResultante(String tipo1, String tipo2) {
         if (tipo1.equals("float64") || tipo2.equals("float64")) {
             return "float64";
         }

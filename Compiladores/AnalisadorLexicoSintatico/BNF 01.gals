@@ -146,12 +146,13 @@ pr_until     = id: "until"
 <lista_de_expressoes> ::= <expressao> #102 <repete_expressao> ;
 <repete_expressao> ::= "," <expressao> #102 <repete_expressao> | î ;
 
-<comando_de_selecao> ::=  pr_if <expressao> <lista_de_comandos> <comando_de_selecao1> pr_end ;
-<comando_de_selecao1> ::= î | pr_else <lista_de_comandos> ;
+<comando_de_selecao> ::=  pr_if <expressao> #125 <lista_de_comandos> <comando_de_selecao1> pr_end #126 ;
+<comando_de_selecao1> ::= î | pr_else #127 <lista_de_comandos> ;
+
 <lista_de_comandos> ::= <comando> ";" <repete_comando> ;
 <repete_comando> ::= <comando> ";" <repete_comando> | î ;
 
-<comando_de_repeticao> ::= pr_do <lista_de_comandos> pr_until <expressao> ;
+<comando_de_repeticao> ::= pr_do #128 <lista_de_comandos> pr_until <expressao> #129 ;
 
 
 <expressao> ::= <valor> <expressao_> ;
