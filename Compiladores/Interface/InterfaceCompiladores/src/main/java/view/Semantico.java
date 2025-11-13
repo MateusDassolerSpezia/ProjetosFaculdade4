@@ -168,7 +168,7 @@ public class Semantico implements Constants {
 
     public void acao101() {
         codigo.add("ret\n"
-                + "  }\n"
+                + "}\n"
                 + "}");
     }
 
@@ -181,7 +181,9 @@ public class Semantico implements Constants {
     }
 
     public void acao118() {
-        codigo.add("call void [mscorlib]System.Console::WriteLine()\n");
+        codigo.add("ldstr \"\\n\"\n");
+        codigo.add("call void [mscorlib]System.Console::Write(string)\n");
+        //codigo.add("call void [mscorlib]System.Console::WriteLine()\n");
     }
 
     public void acao103(Token token) {
@@ -332,7 +334,7 @@ public class Semantico implements Constants {
                     break;
             }
             tabelaSimbolos.put(id, tipoIL);
-            codigo.add(".locals (" + tipoIL + " " + id + ")\n");
+            codigo.add(".locals(" + tipoIL + " " + id + ")\n");
         }
         listaIdentificadores.clear();
     }
@@ -349,12 +351,12 @@ public class Semantico implements Constants {
         listaIdentificadores.clear();
     }
 
-    public void acao123(Token token) throws SemanticError {
+    public void acao123(Token token) throws SemanticError { // PERGUNTAR SOBRE ESSA REGRA
         String id = token.getLexeme();
 
-        if (!tabelaSimbolos.containsKey(id)) {
+        /*if (!tabelaSimbolos.containsKey(id)) {
             throw new SemanticError("identificador não declarado " + id);
-        }
+        }*/
 
         String tipoId = tabelaSimbolos.get(id);
 
@@ -382,7 +384,7 @@ public class Semantico implements Constants {
 
     public void acao124(Token token) {
         codigo.add("ldstr " + token.getLexeme() + "\n");
-        codigo.add("call void [mscorlib]System.Console::Write (string)\n");
+        codigo.add("call void [mscorlib]System.Console::Write(string)\n");
     }
 
     public void acao130(Token token) {
@@ -398,9 +400,9 @@ public class Semantico implements Constants {
     }
 
     public void acao125(Token token) throws SemanticError {
-        if (pilhaTipos.isEmpty()) {
+        /*if (pilhaTipos.isEmpty()) {
             throw new SemanticError("expressão vazia em comando de seleção", token.getPosition());
-        }
+        }*/
 
         String tipoRetirado = pilhaTipos.pop();
 
