@@ -290,25 +290,24 @@ public class MainFrame extends JFrame {
     }
 
     private void acaoCompilar() {
-        //LineNumberView linha = new LineNumberView(editor);
         areaMensagens.setText("");
         Lexico lexico = new Lexico();
         Sintatico sintatico = new Sintatico();
         Semantico semantico = new Semantico();
         lexico.setInput(editor.getText());
+        
         try {
-            sintatico.parse(lexico, semantico);    // tradução dirigida pela sintaxe
+            sintatico.parse(lexico, semantico);   
             criarArquivoIl(semantico.getCodigoGerado());
             areaMensagens.append("programa compilado com sucesso");
-        } // mensagem: programa compilado com sucesso - na área reservada para mensagens
+        } 
+        
         catch (LexicalError e) {
             String source = editor.getText();
             int line = getLineFromPosition(source, e.getPosition());
 
             String wrongLexeme = "";
             if (e.getPosition() >= 0 && e.getPosition() < source.length()) {
-                // se for comentário de bloco mal fechado ou string quebrada,
-                // pode ser que seja mais de 1 caractere, mas pelo menos pegamos o símbolo que deu problema
                 wrongLexeme = String.valueOf(source.charAt(e.getPosition()));
             }
             if (e.getMessage().equals("símbolo inválido")) {
@@ -316,6 +315,7 @@ public class MainFrame extends JFrame {
             } else {
                 areaMensagens.setText("linha " + line + ": " + e.getMessage());
             }
+            
         } catch (SyntaticError e) {
             String source = editor.getText();
             int pos = e.getPosition();

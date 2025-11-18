@@ -153,7 +153,6 @@ public class Semantico implements Constants {
                 break;
 
         }
-        //System.out.println("Ação #"+action+", Token: "+token);  
     }
 
     public void acao100() {
@@ -183,7 +182,6 @@ public class Semantico implements Constants {
     public void acao118() {
         codigo.add("ldstr \"\\n\"\n");
         codigo.add("call void [mscorlib]System.Console::Write(string)\n");
-        //codigo.add("call void [mscorlib]System.Console::WriteLine()\n");
     }
 
     public void acao103(Token token) {
@@ -254,19 +252,17 @@ public class Semantico implements Constants {
         String tipo2 = pilhaTipos.pop();
         String tipo1 = pilhaTipos.pop();
 
-        // Sempre resulta em boolean
         pilhaTipos.push("bool");
 
-        // Geração de código conforme operador armazenado
         switch (operadorRelacional) {
             case "==":
                 codigo.add("ceq\n");
                 break;
 
-            case "~=":  // diferente
+            case "~=":  
                 codigo.add("ceq\n");
                 codigo.add("ldc.i4.1\n");
-                codigo.add("xor\n"); // NOT do resultado
+                codigo.add("xor\n"); 
                 break;
 
             case "<":
@@ -288,7 +284,6 @@ public class Semantico implements Constants {
         String tipo2 = pilhaTipos.pop();
         String tipo1 = pilhaTipos.pop();
 
-        // Resultado sempre é boolean
         pilhaTipos.push("bool");
 
         codigo.add("and\n");
@@ -351,12 +346,8 @@ public class Semantico implements Constants {
         listaIdentificadores.clear();
     }
 
-    public void acao123(Token token) throws SemanticError { // PERGUNTAR SOBRE ESSA REGRA
+    public void acao123(Token token) throws SemanticError {
         String id = token.getLexeme();
-
-        /*if (!tabelaSimbolos.containsKey(id)) {
-            throw new SemanticError("identificador não declarado " + id);
-        }*/
 
         String tipoId = tabelaSimbolos.get(id);
 
@@ -400,10 +391,6 @@ public class Semantico implements Constants {
     }
 
     public void acao125(Token token) throws SemanticError {
-        /*if (pilhaTipos.isEmpty()) {
-            throw new SemanticError("expressão vazia em comando de seleção", token.getPosition());
-        }*/
-
         String tipoRetirado = pilhaTipos.pop();
 
         if (!tipoRetirado.equals("bool")) {
