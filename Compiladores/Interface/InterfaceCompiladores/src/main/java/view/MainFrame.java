@@ -295,14 +295,12 @@ public class MainFrame extends JFrame {
         Sintatico sintatico = new Sintatico();
         Semantico semantico = new Semantico();
         lexico.setInput(editor.getText());
-        
+
         try {
-            sintatico.parse(lexico, semantico);   
+            sintatico.parse(lexico, semantico);
             criarArquivoIl(semantico.getCodigoGerado());
             areaMensagens.append("programa compilado com sucesso");
-        } 
-        
-        catch (LexicalError e) {
+        } catch (LexicalError e) {
             String source = editor.getText();
             int line = getLineFromPosition(source, e.getPosition());
 
@@ -315,19 +313,39 @@ public class MainFrame extends JFrame {
             } else {
                 areaMensagens.setText("linha " + line + ": " + e.getMessage());
             }
-            
+
         } catch (SyntaticError e) {
             String source = editor.getText();
+
+            while (source.endsWith("\n") || source.endsWith("\r") || source.endsWith("\s")) {
+                source = source.substring(0, source.length() - 1);
+            }
+
             int pos = e.getPosition();
+
+            if (pos >= source.length()) {
+                pos = source.length() - 1;
+                if (pos < 0) {
+                    pos = 0;
+                }
+            }
+
             int line = getLineFromPosition(source, pos);
 
-            Token token = lexico.getCurrentToken();
+            Token token = null;
+            try {
+                token = lexico.getCurrentToken();
+            } catch (Exception ex) {
+
+            }
             String encontrado;
 
-            if (token != null && token.getLexeme() != null && !token.getLexeme().isEmpty() && token.getId() != Constants.DOLLAR) {
+            if (token != null && token.getLexeme() != null && !token.getLexeme().isEmpty()) {
                 encontrado = token.getLexeme();
-            } else if (pos >= 0 && pos < source.length() && token.getId() != Constants.DOLLAR) {
+
+            } else if (pos >= 0 && pos < source.length()) {
                 encontrado = String.valueOf(source.charAt(pos));
+
             } else {
                 encontrado = "EOF";
             }
@@ -337,7 +355,7 @@ public class MainFrame extends JFrame {
             } else {
                 areaMensagens.setText("linha " + line + ": encontrado " + encontrado + " " + e.getMessage());
             }
-            
+
         } catch (SemanticError e) {
             String source = editor.getText();
             int pos = e.getPosition();
